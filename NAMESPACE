@@ -1,0 +1,30 @@
+#####################################
+##               Export            ##
+#####################################
+
+
+export(edge.creation,
+	   node.creation,
+	   prioritize,
+	   gDefrag.full,
+	   plotgraph
+	   )
+
+#####################################
+##              Imports            ##
+#####################################       
+
+
+import("sp")
+      
+importFrom("rgdal", writeOGR, readOGR)
+importFrom("rgeos", gTouches, gDistance, gPointOnSurface, gArea, gDifference, gUnion, gUnaryUnion, gLineMerge, gIntersection)
+importFrom("igraph", edge.betweenness.estimate, graph_from_data_frame, distances, E)
+importFrom("utils", data)
+importFrom("grDevices", gray)
+importFrom("graphics", symbols, text)
+importFrom("maptools",SpatialLinesMidPoints)
+importFrom("stats", dist)
+importFrom("methods", as)
+
+#import("rgdal")
