@@ -1,0 +1,74 @@
+---
+title: "A quick guide to the *gDefrag* package"
+author: "Frederico Mestre, Fernando Ascensao & A. Marcia Barbosa"
+date: "May 24, 2018"
+output:
+  html_document: default
+  pdf_document: default
+---
+
+The *gDefrag* package provides a set of tools to assist the de-fragmentation of landscapes. It works by prioritizing the different sections of linear infrastructures (e.g. roads, railways) to increase the available amount of a given resource for a particular species or group.
+
+First you need to (install and) load the *gDefrag* package:
+
+```{r, message=FALSE, warning=FALSE, results='hide'}
+if (!require(gDefrag)) devtools::install_github("FMestre1/gDefrag")
+library(gDefrag)
+```
+
+Now load and take a look at the example dataset that comes with the package, which is a vector map of polygons separated by major roads:
+
+```{r}
+data(road_P)
+plot(road_P)
+```
+
+You can also look at the attribute table associated to these polygons. You can see that there are several variables, including the area and forest cover within each polygon:
+
+```{r}
+road_P@data
+```
+
+You can start by using the `node.creation` function to create a spatial object containing the potential nodes (one in each polygon) and their attributes, based on a given column (in this case, we will choose "forest_sum") of the polygons map: 
+
+```{r, message=FALSE, results='hide'}
+out1 <- node.creation(land_polyg = road_P, value_col = "forest_sum", scale_nodes = 10)
+```
+
+You can see that there is a very small polygon, which is assigned node number 4, and which is probably an artefact of polygon digitizing, or an otherwise unimportant polygon for the analysis. You can also decide that the stretch of road between nodes 7 and 8 is too short for road mitigation aims. Therefore, in the next step when you create the edges (or links) connecting these nodes, you can exclude polygons and/or roads below a given size:
+
+
+```{r, message=FALSE, results='hide'}
+out2 <- edge.creation (nodes = out1, land_polyg = road_P, min_length = 10000, min_pol_area = 1000000)
+```
+
+Now you can calculate priorities for those edges according to a given criterion, which can currently be either `"value"`, `"between"`, `"IIC"` or `"AWM"` (see `help(prioritize)` for details). Let's try it with the first one and look at the results:
+
+```{r, message=FALSE, fig.show='hold'}
+out3 <- prioritize(nodes = out1, edges = out2, method = "value")
+head(out3@data)
+plot(out3)
+```
+
+
+You can use the following command to plot the complete graph, including nodes and edges. These can be either the raw edges of `out2`, or the prioritized edges of `out3`, in which case they will be coloured according to their priority:
+
+```{r, message=FALSE, results='hide'}
+plotgraph(nodes = out1, edges = out3, land_polyg = road_P)
+```
+
+
+You can also run the full process with one single function that does the nodes, edges, prioritization and plotting all in one go:
+
+```{r, message=FALSE, results='hide'}
+out7 <- gDefrag.full(land_polyg = road_P, min_length = 10000, min_pol_area = 1000000, value_col = "forest_sum", method = "value", main = "Node value-based graph")
+```
+
+See the help files of these functions for further details and options.
+This tutorial was built with *RStudio* + *rmarkdown* + *knitr*. Thanks!
+
+
+### REFERENCES
+
+Mestre F., Ascensao F. & Barbosa A.M. (in review) gDefrag: A graph-based tool to help defragmenting 
+landscapes divided by linear infrastructures.
