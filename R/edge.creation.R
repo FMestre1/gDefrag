@@ -15,7 +15,8 @@ node_B <- NULL
   # min_pol_area: (NEW ARGUMENT) minimum area (in the input map projection units) for a polygon to generate edges
   # plot: (NEW ARGUMENT) whether to produce a plot of the edges overlaid to the road polygons
 
-  if (!(all.equal(nodes@proj4string@projargs, land_polyg@proj4string@projargs)))
+  #if (!(all.equal(nodes@proj4string@projargs, land_polyg@proj4string@projargs)))##16-11-2019 - changes in sp and rgdal
+  if (!(all.equal(slot(slot(nodes, "proj4string"), "projargs"), slot(slot(land_polyg, "proj4string"), "projargs"))))  ##16-11-2019 - changes in sp and rgdal
     stop("Input maps have different CRS.")
 
   #if (missing(road_L)) {  # NEW
@@ -29,7 +30,8 @@ node_B <- NULL
 
   message("Creating edges...")
   #Build table
-  node_T <- nodes@data  # attribute table of new spatial nodes
+  #node_T <- nodes@data  # attribute table of new spatial nodes##16-11-2019 - changes in sp and rgdal
+  node_T <- slot(nodes, "data")##16-11-2019 - changes in sp and rgdal
   #adj <- nodes$adjacents
 
   adj <- as.data.frame(gTouches(land_polyg, byid = TRUE))  # transferred from function 1
@@ -108,13 +110,12 @@ node_B <- NULL
   area_A <- rep(NA, nrow(ID1))
   area_B <- rep(NA, nrow(ID1))
 
-
   for(i in 1:nrow(ID1)){
 
     #which nodes?
     row2 <- ID1[i,]
-    nodeA <- row2[1]
-    nodeB <- row2[2]
+    nodeA <- as.numeric(row2[1])#added as.numeric(16-11-2019)
+    nodeB <- as.numeric(row2[2])#added as.numeric(16-11-2019)
 
     lineA <- which(node_T$node_ID == nodeA)
     lineB <- which(node_T$node_ID == nodeB)
@@ -149,6 +150,7 @@ node_B <- NULL
 
   #Edges as spatial lines (transferred from Function 6 'create.shapes'):
   out_lines <- vector("list", nrow(edge_T))
+  
   for(i in 1:nrow(edge_T)){
     l0 <- edge_T[i,]
     xA <- as.numeric(l0["x_node_A"])
@@ -163,18 +165,21 @@ node_B <- NULL
 
   edge_l <- SpatialLines(out_lines)  # new
   edge_L <- SpatialLinesDataFrame(edge_l, data = edge_T)  # new
-  edge_L@proj4string@projargs <- nodes@proj4string@projargs  # new
+  #edge_L@proj4string@projargs <- nodes@proj4string@projargs  # new##16-11-2019 - changes in sp and rgdal
+  slot(slot(edge_L, "proj4string"), "projargs") <- slot(slot(nodes, "proj4string"), "projargs")
 
 
   # OBTER A ESTRADA CORRESPONDENTE A CADA EDGE (new):
   # primeiro calcular a distancia de cada estrada a cada poligono:
 
   if (class(road_L) == "SpatialLinesDataFrame")  # NEW
-    road_L@data$autoID <- 1:nrow(road_L@data)  # NEW
-  else if (class(road_L) == "SpatialLines")  # NEW
+    #road_L@data$autoID <- 1:nrow(road_L@data)  # NEW##16-11-2019 - changes in sp and rgdal
+    slot(road_L, "data")$autoID <- 1:nrow(slot(road_L,"data")) ##16-11-2019 - changes in sp and rgdal
+    else if (class(road_L) == "SpatialLines")  # NEW
     road_L <- SpatialLinesDataFrame(road_L, data = data.frame(autoID = 1:length(road_L)))  # NEW
 
-  land_polyg@data$autoID <- 1:nrow(land_polyg@data)  # NEW
+  #land_polyg@data$autoID <- 1:nrow(land_polyg@data)  # NEW##16-11-2019 - changes in sp and rgdal
+  slot(land_polyg, "data")$autoID <- 1:nrow(slot(land_polyg, "data"))#16-11-2019 - changes in sp and rgdal 
   line_dists <- matrix(data = NA, nrow = length(road_L), ncol = length(land_polyg))
   #rownames(line_dists) <- paste("line", 1:length(road_L), sep = "_")
   #colnames(line_dists) <- paste("pol", 1:length(land_polyg), sep = "_")
@@ -201,18 +206,23 @@ node_B <- NULL
   # associar cada edge 'a(s) estrada(s) entre o seu par de poligonos:
   edge_road_IDs <- vector("list", length(edge_L))
   for (e in 1:length(edge_L)) {
-    road_index <- which(sapply(line_neighbours, setequal, t(edge_L@data[e, c("node_A", "node_B")])))
+    road_index <- which(sapply(line_neighbours, setequal, t(edge_L@data[e, c("node_A", "node_B")])))#16-11-2019 - changes in sp and rgdal 
+    road_index <- which(sapply(line_neighbours, setequal, t(slot(edge_L, "data")[e, c("node_A", "node_B")])))#16-11-2019 - changes in sp and rgdal 
     #edge_L@data$road_ID[e] <- as.integer(names(line_neighbours)[road_index])
     edge_road_IDs[[e]] <- as.integer(names(line_neighbours)[road_index])
   }  # end for e
 
 
   # adicionar o comprimento da(s) estrada(s) de cada edge:
-  edge_L@data$road_length <- NA
-  for (i in 1:nrow(edge_L@data)) {
+  #edge_L@data$road_length <- NA##16-11-2019 - changes in sp and rgdal
+  slot(edge_L, "data")$road_length <- NA #16-11-2019 - changes in sp and rgdal
+  
+  #for (i in 1:nrow(edge_L@data)) {#16-11-2019 - changes in sp and rgdal
+  for(i in 1:nrow(slot(edge_L, "data"))){#16-11-2019 - changes in sp and rgdal  
     edge_road <- road_L[road_L$autoID %in% edge_road_IDs[[i]], ]
     edge_road_sl <- as(edge_road, "SpatialLines")  # needed for SpatialLinesLengths
-    edge_L@data[i, "road_length"] <- sum(SpatialLinesLengths(edge_road_sl))
+    #edge_L@data[i, "road_length"] <- sum(SpatialLinesLengths(edge_road_sl))#16-11-2019 - changes in sp and rgdal
+    slot(edge_L, "data")[i, "road_length"] <- sum(SpatialLinesLengths(edge_road_sl))#16-11-2019 - changes in sp and rgdal
   }  # end for i
 
 

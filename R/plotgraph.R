@@ -5,8 +5,11 @@ function(nodes, edges, land_polyg, scale_nodes = 10, col_nodes = "darkblue", col
   #edge_P - Edges data frame with priority valuese; ## NOW edges - output of function 2 or 3
   #land_polyg - Road shapefile (polygons);
 
-  node_T <- nodes@data  # new
-  edge_P <- edges@data  # new
+  #node_T <- nodes@data  # new##16-11-2019 - changes in sp and rgdal
+  #edge_P <- edges@data  # new##16-11-2019 - changes in sp and rgdal
+
+  node_T <- slot(nodes,"data")  #16-11-2019 - changes in sp and rgdal
+  edge_P <- slot(edges,"data")  #16-11-2019 - changes in sp and rgdal
 
   #LINES  # no longer necessary, as input edges are spatial lines
   #out_lines <- list()
@@ -44,8 +47,9 @@ function(nodes, edges, land_polyg, scale_nodes = 10, col_nodes = "darkblue", col
 
   #juntar dados dos nodes aos poligonos, para os colorir segundo habitat:
   #land_polyg@data <- data.frame(land_polyg@data, nodes@data[match(land_polyg@data[, "ID"], nodes@data[, "ID"]), ])
-  land_polyg@data <- data.frame(land_polyg@data, nodes@data)
-
+  #land_polyg@data <- data.frame(land_polyg@data, nodes@data)##16-11-2019 - changes in sp and rgdal
+  slot(land_polyg, "data") <- data.frame(slot(land_polyg, "data"), slot(nodes, "data"))##16-11-2019 - changes in sp and rgdal
+  
   plot(land_polyg, col="lightblue", main = main)
   plot(edges, lwd=3, col = gray(1-(value_norm/10)), add = TRUE)
 

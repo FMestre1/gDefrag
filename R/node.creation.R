@@ -13,8 +13,10 @@ function(land_polyg, value_col, plot = TRUE, scale_nodes = 1, col_nodes = "deeps
    
   message("Creating nodes...")
   node_ID <- 1:length(land_polyg)  # crio objecto porque vai ser usado mais vezes
-  land_polyg@data <- data.frame(land_polyg@data, node_ID = node_ID)
-
+  
+  #land_polyg@data <- data.frame(land_polyg@data, node_ID = node_ID)#16-11-2019 - changes in sp and rgdal
+  slot(land_polyg, "data") <- data.frame(slot(land_polyg, "data"), node_ID = node_ID)##16-11-2019 - changes in sp and rgdal
+  
   #Extract habitats:
   #road_P_R <- rasterize(land_polyg, habitat_R)
   #road_P_zonal <- zonal(habitat_R, road_P_R, fun = zonal_fun, na.rm = TRUE)
@@ -33,7 +35,8 @@ function(land_polyg, value_col, plot = TRUE, scale_nodes = 1, col_nodes = "deeps
   #Create output table
   nodes_T <- data.frame(node_ID,
                         centroids,
-                        land_polyg@data[ , value_col],
+                        #land_polyg@data[ , value_col],##16-11-2019 - changes in sp and rgdal
+                        slot(land_polyg, "data")[ , value_col],##16-11-2019 - changes in sp and rgdal
                         gArea(land_polyg, byid = TRUE))  # Acertar isto com as unidades!
   colnames(nodes_T) <- c("node_ID", "X", "Y", "pol_value", "pol_area")
   #nodes_T <- data.frame(land_polyg@data, centroids, road_P_zonal)  # new
@@ -55,7 +58,9 @@ function(land_polyg, value_col, plot = TRUE, scale_nodes = 1, col_nodes = "deeps
   }
 
   nodes <- SpatialPointsDataFrame(coords = nodes_T[ , c("X", "Y")], data = nodes_T)  # new
-  nodes@proj4string@projargs <- land_polyg@proj4string@projargs  # new
+  #nodes@proj4string@projargs <- land_polyg@proj4string@projargs#16-11-2019 - changes in sp and rgdal
+  slot(slot(nodes, "proj4string"), "projargs") <- slot(slot(land_polyg, "proj4string"), "projargs")#16-11-2019 - changes in sp and rgdal
+  
 
   #Adjacency - trensferred to Function 2 where it was needed
   #adj <- gTouches(land_polyg, byid = TRUE)

@@ -13,8 +13,12 @@ function(nodes, edges, method, shape=FALSE, shape_name_out = "priorities_shape",
 
   if (!(method %in% c("value", "between", "IIC", "AWM"))) stop("Invalid 'method'.")
 
-  node_T <- nodes@data  # new
-  edge_T <- edges@data  # new
+  #node_T <- nodes@data  # new #16-11-2019 - changes in sp and rgdal
+  #edge_T <- edges@data  # new #16-11-2019 - changes in sp and rgdal
+  
+  node_T <- slot(nodes, "data")  #16-11-2019 - changes in sp and rgdal
+  edge_T <- slot(edges, "data")  #16-11-2019 - changes in sp and rgdal
+  
   #node_T[ , "node_ID"] <- as.character(node_T[ , "node_ID"])  # NEW
   #edge_T[ , "node_A"] <- as.character(edge_T[ , "node_A"])  # NEW
   #edge_T[ , "node_B"] <- as.character(edge_T[ , "node_B"])  # NEW
@@ -155,11 +159,14 @@ function(nodes, edges, method, shape=FALSE, shape_name_out = "priorities_shape",
   #colnames(result)[10] <- "priorization"
   colnames(result)[ncol(result)] <- "priorization"
 
-  edges@data <- data.frame(edges@data, priorization = result[ , "priorization"])  # new
+  #edges@data <- data.frame(edges@data, priorization = result[ , "priorization"])  # new##16-11-2019 - changes in sp and rgdal
+  slot(edges, "data") <- data.frame(slot(edges, "data"), priorization = result[ , "priorization"])  # new##16-11-2019 - changes in sp and rgdal
+  
   #return(result)
   
   #Para seleccionar so os nodos com edges
-  nodes_w_edges_ID <- unique(c(edges@data[,1], edges@data[,2]))
+  #nodes_w_edges_ID <- unique(c(edges@data[,1], edges@data[,2]))#16-11-2019 - changes in sp and rgdal
+  nodes_w_edges_ID <- unique(c(slot(edges, "data")[,1], slot(edges, "data")[,2]))#16-11-2019 - changes in sp and rgdal
   nodes2 <- nodes
   nodes2 <- nodes2[nodes2$node_ID %in% nodes_w_edges_ID,]
     
