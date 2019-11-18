@@ -25,6 +25,6 @@ importFrom("grDevices", gray)
 importFrom("graphics", symbols, text)
 importFrom("maptools",SpatialLinesMidPoints)
 importFrom("stats", dist)
-importFrom("methods", as)
+importFrom("methods", as, slot, "slot<-")
 
 #import("rgdal")
