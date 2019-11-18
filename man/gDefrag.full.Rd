@@ -91,6 +91,6 @@ data(road_P)
 
 out1 <- gDefrag.full(land_polyg = road_P, method = "value", 
 value_col = "forest_sum", main = "value-based graph", 
-shape = TRUE)
+shape = FALSE)
 
 }
