@@ -11,6 +11,8 @@ function(land_polyg, value_col, plot = TRUE, scale_nodes = 1, col_nodes = "deeps
   #if (missing(value_col)) stop('argument "value_col" is missing, with no default')
   #if (!(value_col %in% 1:ncol(land_polyg@data) || value_col %in% names(land_polyg@data)))  stop ("Invalid 'value_col' argument")
    
+  proj4string(land_polyg) <- CRS(proj4string(land_polyg))#18-11-2019
+  
   message("Creating nodes...")
   node_ID <- 1:length(land_polyg)  # crio objecto porque vai ser usado mais vezes
   
@@ -61,7 +63,8 @@ function(land_polyg, value_col, plot = TRUE, scale_nodes = 1, col_nodes = "deeps
   #nodes@proj4string@projargs <- land_polyg@proj4string@projargs#16-11-2019 - changes in sp and rgdal
   slot(slot(nodes, "proj4string"), "projargs") <- slot(slot(land_polyg, "proj4string"), "projargs")#16-11-2019 - changes in sp and rgdal
   
-
+  proj4string(nodes) <- CRS(proj4string(land_polyg))#18-11-2019
+  
   #Adjacency - trensferred to Function 2 where it was needed
   #adj <- gTouches(land_polyg, byid = TRUE)
   ################################################

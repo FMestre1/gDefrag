@@ -2,7 +2,7 @@ Package: gDefrag
 Type: Package
 Title: Graph-Based Landscape De-Fragmentation
 Version: 0.2
-Date: 2019-11-16
+Date: 2019-11-18
 Depends: sp, R (>= 3.0)
 Imports: maptools, rgeos, rgdal, igraph, methods 
 Author: Frederico Mestre, Fernando Ascensao, A. Marcia Barbosa

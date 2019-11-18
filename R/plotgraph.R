@@ -7,7 +7,9 @@ function(nodes, edges, land_polyg, scale_nodes = 10, col_nodes = "darkblue", col
 
   #node_T <- nodes@data  # new##16-11-2019 - changes in sp and rgdal
   #edge_P <- edges@data  # new##16-11-2019 - changes in sp and rgdal
-
+  
+  proj4string(land_polyg) <- CRS(proj4string(land_polyg))#18-11-2019
+  
   node_T <- slot(nodes,"data")  #16-11-2019 - changes in sp and rgdal
   edge_P <- slot(edges,"data")  #16-11-2019 - changes in sp and rgdal
 

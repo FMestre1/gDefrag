@@ -6,6 +6,7 @@ road_length <- NULL
 node_A <- NULL
 node_B <- NULL
 
+proj4string(land_polyg) <- CRS(proj4string(land_polyg))#18-11-2019
 
   #Arguments:
   #node_T - Nodes data frame - DEPRECATED
