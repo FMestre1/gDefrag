@@ -4,17 +4,17 @@
 Wrapper function running the full process
 }
 \description{
-This function runs the full process of creating the nodes, creating the 
-edges and establishing priority edges to be used to enhance connectivity 
+This function runs the full process of creating the nodes, creating the
+edges and establishing priority edges to be used to enhance connectivity
 in the landscape for the focal species.
 }
 \usage{
-gDefrag.full(land_polyg, method, value_col = NULL, 
-min_length = 0, min_pol_area = 0, shape = FALSE, 
-shape_name_nodes = "shape_all_nodes", shape_name_edges = "shape_edges", 
-shape_name_out = "priorities_shape", 
-shape_name_nodes_edges = "nodes_with_edges", 
-scale_nodes = 10, col_nodes = "deepskyblue4", col_labels = "white", 
+gDefrag.full(land_polyg, method, value_col = NULL,
+min_length = 0, min_pol_area = 0, shape = FALSE,
+shape_name_nodes = "shape_all_nodes", shape_name_edges = "shape_edges",
+shape_name_out = "priorities_shape",
+shape_name_nodes_edges = "nodes_with_edges",
+scale_nodes = 10, col_nodes = "deepskyblue4", col_labels = "white",
 cex_labels = 1, main = "Graph")
 }
 %- maybe also 'usage' for other objects documented here.
@@ -50,7 +50,7 @@ Name of the edges prioritization output shapefile to be created.
 Instead of 'shape_name_nodes', that depicts all the nodes, this shape has only nodes considered in the prioritization procedure (those with an area greater that the argument 'min_pol_area' in the function \code{\link{edge.creation}}).
 }
   \item{scale_nodes}{
-Node size scaling factor for correct viewing in the plot. To be internally passed to as \code{\link{plotgraph}}.  
+Node size scaling factor for correct viewing in the plot. To be internally passed to as \code{\link{plotgraph}}.
 }
   \item{col_nodes}{
 Node colour. To be internally passed to as \code{\link{plotgraph}}.
@@ -71,8 +71,8 @@ The prioritization of the connectivity corridors can be made with one of four me
 \itemize{
 	\item 'value' - Give priority to edges connecting nodes with higher attribute value (e.g. suitability for the focal species);
 	\item 'traffic' - Give priority to edges representing roads with more traffic;
-	\item 'IIC' - Give priority to edges with higher overall impact in the connectivity. This was implemented by using the Integral Index of Connectivity (IIC) developed by Pascual-Hortal and Saura (2006). The connectivity relevance of each edge was evaluated usinf the approach described in Pascual-Hortal and Saura (2006): dIIC=((I1-I2)/I1)*100, where I1 is the IIC before edge removal and I2 is the IIC after. 
-	\item 'between' - Give priority to edges with higher betweenness using the function \code{edge.beetweenness.estimate} from the \code{igraph} package.
+	\item 'IIC' - Give priority to edges with higher overall impact in the connectivity. This was implemented by using the Integral Index of Connectivity (IIC) developed by Pascual-Hortal and Saura (2006). The connectivity relevance of each edge was evaluated usinf the approach described in Pascual-Hortal and Saura (2006): dIIC=((I1-I2)/I1)*100, where I1 is the IIC before edge removal and I2 is the IIC after.
+	\item 'between' - Give priority to edges with higher betweenness using the function \code{edge_betweenness} from the \code{igraph} package.
 		\item 'AWM' - Give priority to edges connecting nodes with more suitable area.
 }
 }
@@ -89,8 +89,8 @@ Frederico Mestre, Fernando Ascensao and A. Marcia Barbosa
 
 data(road_P)
 
-out1 <- gDefrag.full(land_polyg = road_P, method = "value", 
-value_col = "forest_sum", main = "value-based graph", 
+out1 <- gDefrag.full(land_polyg = road_P, method = "value",
+value_col = "forest_sum", main = "value-based graph",
 shape = FALSE)
 
 }

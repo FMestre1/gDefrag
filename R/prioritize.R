@@ -15,10 +15,10 @@ function(nodes, edges, method, shape=FALSE, shape_name_out = "priorities_shape",
 
   #node_T <- nodes@data  # new #16-11-2019 - changes in sp and rgdal
   #edge_T <- edges@data  # new #16-11-2019 - changes in sp and rgdal
-  
+
   node_T <- slot(nodes, "data")  #16-11-2019 - changes in sp and rgdal
   edge_T <- slot(edges, "data")  #16-11-2019 - changes in sp and rgdal
-  
+
   #node_T[ , "node_ID"] <- as.character(node_T[ , "node_ID"])  # NEW
   #edge_T[ , "node_A"] <- as.character(edge_T[ , "node_A"])  # NEW
   #edge_T[ , "node_B"] <- as.character(edge_T[ , "node_B"])  # NEW
@@ -58,7 +58,7 @@ function(nodes, edges, method, shape=FALSE, shape_name_out = "priorities_shape",
   if (method == "between"){#OK!
     nd <- node_T  # changed from node_T$nodes
     mygraph <- graph_from_data_frame(edge_T, directed = FALSE, vertices = nd)
-    out_C <- edge.betweenness.estimate(mygraph, e = E(mygraph), directed = FALSE, cutoff = 0)
+    out_C <- edge_betweenness(mygraph, e = E(mygraph), directed = FALSE, cutoff = 0)
     out_C <- (out_C-min(out_C))/(max(out_C)-min(out_C))*100
     result <- cbind(edge_T, out_C)
     result <- as.data.frame(result)
@@ -89,7 +89,7 @@ function(nodes, edges, method, shape=FALSE, shape_name_out = "priorities_shape",
 
     #Output vector
     dI <- rep(NA, nrow(edge_T))
-	
+
 	#Starting IIC value
     I1 <- metric(n=node_T, e=edge_T)
 
@@ -123,15 +123,15 @@ function(nodes, edges, method, shape=FALSE, shape_name_out = "priorities_shape",
 		{
 			# gets in a data.frame with the "id..." column.  Orders by it and returns it
 			if(!any(colnames(DATA)=="id...")) stop("The function order.by.id...and.remove.it only works with data.frame objects which includes the 'id...' order column")
- 
+
 			ss_r <- order(DATA$id...)
 			ss_c <- colnames(DATA) != "id..."
 			DATA[ss_r, ss_c]
 		}
- 
+
 		# tmp <- function(x) x==1; 1	# why we must check what to do if it is missing or not...
 		# tmp()
- 
+
 		if(!missing(keep_order))
 		{
 			if(keep_order == 1) return(order.by.id...and.remove.it(merge(x=add.id.column.to.data(x),y=y,..., sort = FALSE)))
@@ -140,13 +140,13 @@ function(nodes, edges, method, shape=FALSE, shape_name_out = "priorities_shape",
 			warning("The function merge.with.order only accepts NULL/1/2 values for the keep_order variable")
 		} else {return(merge(x=x,y=y,..., sort = sort))}
 	}
- 
+
   nodes_areas <- node_T[,c(1,5)]
   nodes_A_prop <- edge_T[,c(1,8)]
   nodes_B_prop <- edge_T[,c(2,9)]
-  ndA <- merge.with.order(x=nodes_A_prop, y=nodes_areas, by.x="node_A", 
+  ndA <- merge.with.order(x=nodes_A_prop, y=nodes_areas, by.x="node_A",
   by.y="node_ID", keep_order=1)
-  ndB <- merge.with.order(x=nodes_B_prop, y=nodes_areas, by.x="node_B", 
+  ndB <- merge.with.order(x=nodes_B_prop, y=nodes_areas, by.x="node_B",
   by.y="node_ID", keep_order=1)
   table1 <- cbind(ndA,ndB)
   #names(table1) <- c("node_A", "Ah", "At", "node_B", "Bh", "Bt")
@@ -161,22 +161,22 @@ function(nodes, edges, method, shape=FALSE, shape_name_out = "priorities_shape",
 
   #edges@data <- data.frame(edges@data, priorization = result[ , "priorization"])  # new##16-11-2019 - changes in sp and rgdal
   slot(edges, "data") <- data.frame(slot(edges, "data"), priorization = result[ , "priorization"])  # new##16-11-2019 - changes in sp and rgdal
-  
+
   #return(result)
-  
+
   #Para seleccionar so os nodos com edges
   #nodes_w_edges_ID <- unique(c(edges@data[,1], edges@data[,2]))#16-11-2019 - changes in sp and rgdal
   nodes_w_edges_ID <- unique(c(slot(edges, "data")[,1], slot(edges, "data")[,2]))#16-11-2019 - changes in sp and rgdal
   nodes2 <- nodes
   nodes2 <- nodes2[nodes2$node_ID %in% nodes_w_edges_ID,]
-    
 
-  if (shape == TRUE){  
+
+  if (shape == TRUE){
   suppressWarnings(writeOGR(edges, ".", shape_name_out, driver="ESRI Shapefile",overwrite_layer=TRUE))
   suppressWarnings(writeOGR(nodes2, ".", shape_name_nodes_edges, driver="ESRI Shapefile",overwrite_layer=TRUE))
   message("Two shapefiles created! Check the working directory, please.")
 
  }
-  
+
   return(edges) # new
 }
