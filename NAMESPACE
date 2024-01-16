@@ -12,14 +12,14 @@ export(edge.creation,
 
 #####################################
 ##              Imports            ##
-#####################################       
+#####################################
 
 
 import("sp")
-      
+
 importFrom("rgdal", writeOGR, readOGR)
 importFrom("rgeos", gTouches, gDistance, gPointOnSurface, gArea, gDifference, gUnion, gUnaryUnion, gLineMerge, gIntersection)
-importFrom("igraph", edge.betweenness.estimate, graph_from_data_frame, distances, E)
+importFrom("igraph", edge_betweenness, graph_from_data_frame, distances, E)
 importFrom("utils", data)
 importFrom("grDevices", gray)
 importFrom("graphics", symbols, text)
