@@ -4,18 +4,12 @@
 #New version
 #https://github.com/FMestre1/gDefrag
 
-library(devtools)
-
+#First install the pachage
+#library(devtools)
 # Install the package from GitHub
-install_github("FMestre1/gDefrag") 
+#devtools::install_github("FMestre1/gDefrag") 
 
-library(terra)
-library(sf)
-source("R/node.creation.R")
-source("R/edge.creation.R")
-source("R/prioritize.R")
-source("R/plotgraph.R")
-
+library(gDefrag)
 
 road_P <- terra::vect("data/road_P.shp")
 
