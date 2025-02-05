@@ -21,7 +21,7 @@ edge.creation <-
     
     message("Extracting road lines from polygon borders...")
     
-    road_L <- sharedPaths(land_polyg)
+    road_L <- terra::sharedPaths(land_polyg)
     #Add info on length
     road_L$length <- perim(road_L)
     

@@ -4,7 +4,7 @@
 #New version
 #https://github.com/FMestre1/gDefrag
 
-#First install the pachage
+#First install the package
 #library(devtools)
 # Install the package from GitHub
 #devtools::install_github("FMestre1/gDefrag") 
