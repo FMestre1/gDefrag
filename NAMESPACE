@@ -2,7 +2,6 @@
 ##               Export            ##
 #####################################
 
-
 export(edge.creation,
 	   node.creation,
 	   prioritize,
@@ -14,17 +13,15 @@ export(edge.creation,
 ##              Imports            ##
 #####################################       
 
-
 import("sp")
-      
-importFrom("rgdal", writeOGR, readOGR)
-importFrom("rgeos", gTouches, gDistance, gPointOnSurface, gArea, gDifference, gUnion, gUnaryUnion, gLineMerge, gIntersection)
+
+#importFrom("rgdal", writeOGR, readOGR)
+#importFrom("rgeos", gTouches, gDistance, gPointOnSurface, gArea, gDifference, gUnion, gUnaryUnion, gLineMerge, gIntersection)
 importFrom("igraph", edge.betweenness.estimate, graph_from_data_frame, distances, E)
 importFrom("utils", data)
 importFrom("grDevices", gray)
 importFrom("graphics", symbols, text)
-importFrom("maptools",SpatialLinesMidPoints)
+#importFrom("maptools",SpatialLinesMidPoints)
 importFrom("stats", dist)
 importFrom("methods", as, slot, "slot<-")
-
 #import("rgdal")

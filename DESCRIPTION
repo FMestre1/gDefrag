@@ -1,10 +1,10 @@
 Package: gDefrag
 Type: Package
 Title: Graph-Based Landscape De-Fragmentation
-Version: 0.3
-Date: 2020-08-28
+Version: 1.0
+Date: 2025-02-05
 Depends: sp, R (>= 3.0)
-Imports: maptools, rgeos, rgdal, igraph, methods 
+Imports: igraph, methods, terra 
 Author: Frederico Mestre, Fernando Ascensao, A. Marcia Barbosa
 Maintainer: Frederico Mestre <mestre.frederico@gmail.com>
 Description:  Provides a set of tools to help the de-fragmentation process. It works by prioritizing the different sections of linear infrastructures (e.g. roads, power-lines) to increase the available amount of a given resource.   

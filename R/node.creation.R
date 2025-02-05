@@ -1,5 +1,6 @@
 node.creation <-
 function(land_polyg, value_col, plot = TRUE, scale_nodes = 1, col_nodes = "deepskyblue4", cex_labels = 1, shape = FALSE, shape_name_nodes = "shape_nodes"){#FUNCTION 1
+  
   # land_polyg: spatialPolygonsDataFrame
   # habitat_R, proportion: DEPRECATED ARGUMENTS (DELETE)
   # value_col: (NEW ARGUMENT) name or index number of the column in land_polyg@data containing the value to use for prioritizing nodes
@@ -7,17 +8,18 @@ function(land_polyg, value_col, plot = TRUE, scale_nodes = 1, col_nodes = "deeps
   #Verify classes
   #if (class(habitat_R) != "RasterLayer") stop("The object habitat_R must be of class Rasterlayer")
 
-  if (!is.projected(land_polyg))  stop ("'land_polyg' must be in a projected coordinate system.")
+  #if (!is.projected(land_polyg))  stop ("'land_polyg' must be in a projected coordinate system.")# 18-01-2023
+  if (terra::is.lonlat(land_polyg))  stop ("'land_polyg' must be in a projected coordinate system.")
   #if (missing(value_col)) stop('argument "value_col" is missing, with no default')
   #if (!(value_col %in% 1:ncol(land_polyg@data) || value_col %in% names(land_polyg@data)))  stop ("Invalid 'value_col' argument")
    
-  proj4string(land_polyg) <- CRS(proj4string(land_polyg))#18-11-2019
+  #proj4string(land_polyg) <- CRS(proj4string(land_polyg))#18-11-2019 # 18-01-2023
   
   message("Creating nodes...")
   node_ID <- 1:length(land_polyg)  # crio objecto porque vai ser usado mais vezes
   
   #land_polyg@data <- data.frame(land_polyg@data, node_ID = node_ID)#16-11-2019 - changes in sp and rgdal
-  slot(land_polyg, "data") <- data.frame(slot(land_polyg, "data"), node_ID = node_ID)##16-11-2019 - changes in sp and rgdal
+  #slot(land_polyg, "data") <- data.frame(slot(land_polyg, "data"), node_ID = node_ID)##16-11-2019 - changes in sp and rgdal # 18-01-2023
   
   #Extract habitats:
   #road_P_R <- rasterize(land_polyg, habitat_R)
@@ -32,15 +34,22 @@ function(land_polyg, value_col, plot = TRUE, scale_nodes = 1, col_nodes = "deeps
   #centroids <- gCentroid(land_polyg, byid = TRUE, id = node_ID)  # acrescentei ultimo argumento
   #centroids <- centroids@coords
   #centroids <- coordinates(land_polyg)  # poupa algum tempo
-  centroids <- coordinates(gPointOnSurface(land_polyg, byid = TRUE, id = node_ID))  # NEW: random points within the polygons; actual centroids may fall outside L-shaped polygons and cause errors downstream
-
+  
+  #centroids <- coordinates(gPointOnSurface(land_polyg, byid = TRUE, id = node_ID))  # NEW: random points within the polygons; actual centroids may fall outside L-shaped polygons and cause errors downstream # 18-01-2023
+  centroids <- terra::centroids(land_polyg, inside = TRUE)
+  centroids <- as.data.frame(terra::crds(centroids))
+  
   #Create output table
-  nodes_T <- data.frame(node_ID,
-                        centroids,
-                        #land_polyg@data[ , value_col],##16-11-2019 - changes in sp and rgdal
-                        slot(land_polyg, "data")[ , value_col],##16-11-2019 - changes in sp and rgdal
-                        gArea(land_polyg, byid = TRUE))  # Acertar isto com as unidades!
+  nodes_T <- data.frame(node_ID, centroids, as.data.frame(land_polyg[ , value_col]) , terra::expanse(land_polyg))
   colnames(nodes_T) <- c("node_ID", "X", "Y", "pol_value", "pol_area")
+  
+  #Create output table # commentedn in 18-01-2023
+  #nodes_T <- data.frame(node_ID,
+  #                      centroids,
+  #                      #land_polyg@data[ , value_col],##16-11-2019 - changes in sp and rgdal
+  #                      slot(land_polyg, "data")[ , value_col],##16-11-2019 - changes in sp and rgdal
+  #                      gArea(land_polyg, byid = TRUE))  # Acertar isto com as unidades!
+  #colnames(nodes_T) <- c("node_ID", "X", "Y", "pol_value", "pol_area")
   #nodes_T <- data.frame(land_polyg@data, centroids, road_P_zonal)  # new
   #colnames(nodes_T)[(ncol(nodes_T)-2):ncol(nodes_T)] <- c("X", "Y", "value")
   
@@ -59,11 +68,14 @@ function(land_polyg, value_col, plot = TRUE, scale_nodes = 1, col_nodes = "deeps
     #text(x = nodes_T[ , c("X", "Y")], labels = as.character(nodes_T[ , "node_ID"]), cex = cex_labels)  # to plot only nodes above min_pol_area
   }
 
-  nodes <- SpatialPointsDataFrame(coords = nodes_T[ , c("X", "Y")], data = nodes_T)  # new
-  #nodes@proj4string@projargs <- land_polyg@proj4string@projargs#16-11-2019 - changes in sp and rgdal
-  slot(slot(nodes, "proj4string"), "projargs") <- slot(slot(land_polyg, "proj4string"), "projargs")#16-11-2019 - changes in sp and rgdal
+  #nodes <- SpatialPointsDataFrame(coords = nodes_T[ , c("X", "Y")], data = nodes_T)  # 18-01-2023
+  nodes <-terra::vect(nodes_T, geom = c("X","Y")) # 18-01-2023
+  terra::crs(nodes) <- terra::crs(land_polyg)
   
-  proj4string(nodes) <- CRS(proj4string(land_polyg))#18-11-2019
+  #nodes@proj4string@projargs <- land_polyg@proj4string@projargs#16-11-2019 - changes in sp and rgdal
+  #slot(slot(nodes, "proj4string"), "projargs") <- slot(slot(land_polyg, "proj4string"), "projargs")#16-11-2019 - changes in sp and rgdal   # 18-01-2023
+  
+  #proj4string(nodes) <- CRS(proj4string(land_polyg))#18-11-2019   # 18-01-2023
   
   #Adjacency - trensferred to Function 2 where it was needed
   #adj <- gTouches(land_polyg, byid = TRUE)
@@ -81,8 +93,9 @@ function(land_polyg, value_col, plot = TRUE, scale_nodes = 1, col_nodes = "deeps
   #result <- list(nodes = nodes, adjacents = adj)
   
   if (shape == TRUE){
-  suppressWarnings(writeOGR(nodes, ".", shape_name_nodes, driver = "ESRI Shapefile", overwrite_layer = TRUE))
+  #suppressWarnings(writeOGR(nodes, ".", shape_name_nodes, driver = "ESRI Shapefile", overwrite_layer = TRUE)) # 18-01-2023
   message("Shapefile created! Check the working directory, please.")
+  terra::writeVector(nodes, filename = shape_name_nodes, overwrite = TRUE)
   }
 
   message("Done!")
