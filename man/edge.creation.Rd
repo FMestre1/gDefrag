@@ -42,7 +42,7 @@ Should the shapefile file be overwritten?
 If shape = TRUE, this function produces one shapefile with edges without prioritization metrics.
 }
 \value{
-The function returns a SpatialLinesDataFrame with the edges. The data table of this data frame has the following fields:
+The function returns a SpatVector with the edges. The data table of this data frame has the following fields:
 \itemize{
 \item node_A - Node A Id.
 \item node_B - Node B Id.

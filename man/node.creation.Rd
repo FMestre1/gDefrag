@@ -45,7 +45,7 @@ Should the shapefile file be overwritten?
 If shape = TRUE, this function produces one shapefile with all the nodes.
 }
 \value{
-The function returns a SpatialPointsDataFrame with the nodes. The data table of this data frame has the following fields:
+The function returns a SpatVector with the nodes. The data table of this data frame has the following fields:
 \itemize{
 \item X - Node latitude.
 \item Y - Node longitude.

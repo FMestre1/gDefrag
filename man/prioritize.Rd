@@ -41,7 +41,7 @@ The prioritization of the connectivity corridors can be made with one of these m
 }
 }
 \value{
-The output is a SpatialLinesDataFrame with an additional field, 'priorization'. This field provides the desired priorization value.
+The output is a SpatVector with an additional field, 'priorization'. This field provides the desired priorization value.
 }
 \references{
 Pascual-Hortal, L., Saura, S. (2006). Comparison and development of new graph-based landscape connectivity indices: towards the priorization of habitat patches and corridors for conservation. Landscape Ecology, 21(7), 959-967.

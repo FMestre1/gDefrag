@@ -77,7 +77,7 @@ The prioritization of the connectivity corridors can be made with one of four me
 }
 }
 \value{
-This function produces a 'list' object. This list has two objects, one with the information of the nodes and the other with the information on the edges.
+This function produces a SpatVector with the priorization results.
 }
 \author{
 Frederico Mestre, Fernando Ascensao and A. Marcia Barbosa

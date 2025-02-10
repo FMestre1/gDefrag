@@ -23,6 +23,15 @@ out1 <- node.creation(land_polyg = road_P,
                       shape_name_nodes = "shape_nodes_file", 
                       overwrite = TRUE)
 
+#Obtaining nodes
+out1_2 <- node.creation(land_polyg = road_P, 
+                      value_col = "proprtn",
+                      scale_nodes = 10, 
+                      cex_labels = 1, 
+                      shape = TRUE,
+                      shape_name_nodes = "shape_nodes_file", 
+                      overwrite = TRUE)
+
 #Obtaining edges
 out2 <- edge.creation(nodes = out1, 
                       land_polyg = road_P,
@@ -37,11 +46,35 @@ out3 <- prioritize(nodes = out1,
                    edges = out2, 
                    method = "value",
                    shape=TRUE, 
+                   shape_name_out = "priorities_shape1", 
+                   overwrite = TRUE)
+
+out4 <- prioritize(nodes = out1, 
+                   edges = out2, 
+                   method = "IIC",
+                   shape=TRUE, 
                    shape_name_out = "priorities_shape2", 
+                   overwrite = TRUE)
+
+out5 <- prioritize(nodes = out1, 
+                   edges = out2, 
+                   method = "between",
+                   shape=TRUE, 
+                   shape_name_out = "priorities_shape3", 
+                   overwrite = TRUE)
+
+out6 <- prioritize(nodes = out1_2, 
+                   edges = out2, 
+                   method = "AWM",
+                   shape=TRUE, 
+                   shape_name_out = "priorities_shape4", 
                    overwrite = TRUE)
 
 #Plotting results
 plotgraph(nodes = out1, edges = out3, land_polyg = road_P, main = "Habitat value")
+plotgraph(nodes = out1, edges = out4, land_polyg = road_P, main = "IIC")
+plotgraph(nodes = out1, edges = out5, land_polyg = road_P, main = "Edge betweenness")
+plotgraph(nodes = out1_2, edges = out6, land_polyg = road_P, main = "AWC")
 
 
 #################################################################################
