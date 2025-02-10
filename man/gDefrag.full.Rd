@@ -46,9 +46,6 @@ Name of the edges shapefile to be created (without prioritization).
   \item{shape_name_out}{
 Name of the edges prioritization output shapefile to be created.
 }
-  \item{shape_name_nodes_edges}{
-Instead of 'shape_name_nodes', that depicts all the nodes, this shape has only nodes considered in the prioritization procedure (those with an area greater that the argument 'min_pol_area' in the function \code{\link{edge.creation}}).
-}
   \item{scale_nodes}{
 Node size scaling factor for correct viewing in the plot. To be internally passed to as \code{\link{plotgraph}}.  
 }
@@ -63,6 +60,9 @@ Text labels font size. To be internally passed to as \code{\link{plotgraph}}.
 }
   \item{main}{
 Main plot title. To be internally passed to as \code{\link{plotgraph}}.
+}
+  \item{overwrite}{
+Should the shapefile file be overwritten?
 }
 }
 \details{
@@ -90,7 +90,11 @@ Frederico Mestre, Fernando Ascensao and A. Marcia Barbosa
 data(road_P)
 
 out1 <- gDefrag.full(land_polyg = road_P, method = "value", 
-value_col = "forest_sum", main = "value-based graph", 
-shape = FALSE)
+                     value_col = "frst_sm", main = "value-based graph", 
+                     shape_name_nodes = "fullrun_shape_all_nodes0", 
+                     shape_name_edges = "fullrun_shape_edges0", 
+                     shape_name_out = "fullrun_priorities_shape0",
+                     shape = TRUE,
+                     overwrite = TRUE)
 
 }

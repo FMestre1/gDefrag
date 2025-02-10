@@ -1,5 +1,5 @@
 edge.creation <-
-  function(nodes, land_polyg, min_length = 0, min_pol_area = 0, plot = TRUE, shape = FALSE, shape_name_edges = "shape_edges"){#FUNCTION 2
+  function(nodes, land_polyg, min_length = 0, min_pol_area = 0, plot = TRUE, shape = FALSE, shape_name_edges = "shape_edges", overwrite){#FUNCTION 2
     
     #Create empty objects
     autoID <- NULL
@@ -16,8 +16,12 @@ edge.creation <-
     # min_length: minimum length of road (in the input map projection units) for an edge to be considered for crossing it
     # min_pol_area: (NEW ARGUMENT) minimum area (in the input map projection units) for a polygon to generate edges
     # plot: (NEW ARGUMENT) whether to produce a plot of the edges overlaid to the road polygons
+    # shape = FALSE - write shapefile to memory?
+    # shape_name_edges = "shape_edges" - if writing define name
     
     if(terra::crs(nodes) != terra::crs(land_polyg)) stop("Input maps have different CRS.")# NEW 02-02-2025
+    if(shape == FALSE && overwrite == TRUE) message("Not writing vector to file, no need to define value to overwrite argument.")
+    if(shape == FALSE && shape_name_edges != "shape_edges") message("Not writing vector to file, no need to define shapefile name.")
     
     message("Extracting road lines from polygon borders...")
     
@@ -192,8 +196,8 @@ edge.creation <-
       
       #Create shapefile
       message("Creating shapefile...")
-      terra::writeVector(edge_L, "edges_shapefile.shp")
-      terra::writeVector(edge_L, paste0(shape_name_edges, ".shp"))
+      #terra::writeVector(edge_L, "edges_shapefile.shp")
+      terra::writeVector(edge_L, filename = paste0(shape_name_edges, ".shp"), overwrite = overwrite)
       
       message("Shapefile created! Check the working directory, please.")
     }

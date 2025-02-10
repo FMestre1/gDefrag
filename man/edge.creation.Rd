@@ -34,6 +34,9 @@ Create a shapefile with the edges (TRUE/FALSE).
   \item{shape_name_edges}{
 Name of the edges shapefile to be created (without prioritization).
 }
+  \item{overwrite}{
+Should the shapefile file be overwritten?
+}
 }
 \details{
 If shape = TRUE, this function produces one shapefile with edges without prioritization metrics.
@@ -63,10 +66,22 @@ Frederico Mestre, Fernando Ascensao and A. Marcia Barbosa
 \examples{
 data(road_P)
 
-out1 <- node.creation(land_polyg=road_P, value_col = "forest_sum", scale_nodes = 10, 
-col_nodes = "pink", cex_labels = 0.7)
+#Obtaining nodes
+out1 <- node.creation(land_polyg = road_P, 
+                      value_col = "frst_sm",
+                      scale_nodes = 10, 
+                      cex_labels = 1, 
+                      shape = TRUE,
+                      shape_name_nodes = "shape_nodes_file", 
+                      overwrite = TRUE)
 
-out2 <- edge.creation(nodes = out1, land_polyg = road_P, min_length = 0, 
-min_pol_area = 0, plot = FALSE)
+#Obtaining edges
+out2 <- edge.creation(nodes = out1, 
+                      land_polyg = road_P,
+                      min_length = 0, 
+                      min_pol_area = 0, 
+                      shape_name_edges = "shape_edges_file",
+                      shape = TRUE,
+                      overwrite = TRUE)
 
 }

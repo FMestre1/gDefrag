@@ -1,26 +1,16 @@
 node.creation <-
-function(land_polyg, value_col, plot = TRUE, scale_nodes = 1, col_nodes = "deepskyblue4", cex_labels = 1, shape = FALSE, shape_name_nodes = "shape_nodes"){#FUNCTION 1
+function(land_polyg, value_col, plot = TRUE, scale_nodes = 1, col_nodes = "red", cex_labels = 1, shape = FALSE, shape_name_nodes = "shape_nodes", overwrite){#FUNCTION 1
   
-  # land_polyg: spatialPolygonsDataFrame
-  # habitat_R, proportion: DEPRECATED ARGUMENTS (DELETE)
-  # value_col: (NEW ARGUMENT) name or index number of the column in land_polyg@data containing the value to use for prioritizing nodes
 
-  #Verify classes
-  #if (class(habitat_R) != "RasterLayer") stop("The object habitat_R must be of class Rasterlayer")
-
-  #if (!is.projected(land_polyg))  stop ("'land_polyg' must be in a projected coordinate system.")# 18-01-2023
   if (terra::is.lonlat(land_polyg))  stop ("'land_polyg' must be in a projected coordinate system.")
-  #if (missing(value_col)) stop('argument "value_col" is missing, with no default')
-  #if (!(value_col %in% 1:ncol(land_polyg@data) || value_col %in% names(land_polyg@data)))  stop ("Invalid 'value_col' argument")
-   
-  #proj4string(land_polyg) <- CRS(proj4string(land_polyg))#18-11-2019 # 18-01-2023
+  if(shape == FALSE && overwrite == TRUE) message("Not writing vector to file, no need to define value to overwrite argument.")
+  if(shape == FALSE && shape_name_nodes != "shape_nodes") message("Not writing vector to file, no need to define shapefile name.")
+  if(shape == TRUE && shape_name_nodes == "shape_nodes") message("You did not define a name for the shapefile. It will be named shape_nodes.shp!")
   
   message("Creating nodes...")
   node_ID <- 1:length(land_polyg)  # crio objecto porque vai ser usado mais vezes
   
-  #land_polyg@data <- data.frame(land_polyg@data, node_ID = node_ID)#16-11-2019 - changes in sp and rgdal
-  #slot(land_polyg, "data") <- data.frame(slot(land_polyg, "data"), node_ID = node_ID)##16-11-2019 - changes in sp and rgdal # 18-01-2023
-  
+
   #Extract habitats:
   #road_P_R <- rasterize(land_polyg, habitat_R)
   #road_P_zonal <- zonal(habitat_R, road_P_R, fun = zonal_fun, na.rm = TRUE)
@@ -93,9 +83,8 @@ function(land_polyg, value_col, plot = TRUE, scale_nodes = 1, col_nodes = "deeps
   #result <- list(nodes = nodes, adjacents = adj)
   
   if (shape == TRUE){
-  #suppressWarnings(writeOGR(nodes, ".", shape_name_nodes, driver = "ESRI Shapefile", overwrite_layer = TRUE)) # 18-01-2023
   message("Shapefile created! Check the working directory, please.")
-  terra::writeVector(nodes, filename = shape_name_nodes, overwrite = TRUE)
+  terra::writeVector(nodes, filename = paste0(shape_name_nodes, ".shp"), overwrite = overwrite)
   }
 
   message("Done!")

@@ -37,6 +37,9 @@ Create a shapefile with the edges (TRUE/FALSE).
   \item{shape_name_nodes}{
 Name of the nodes shapefile to be created (all nodes).
 }
+  \item{overwrite}{
+Should the shapefile file be overwritten?
+}
 }
 \details{
 If shape = TRUE, this function produces one shapefile with all the nodes.
@@ -57,9 +60,15 @@ Frederico Mestre, Fernando Ascensao and A. Marcia Barbosa
 \code{\link{edge.creation}}
 }
 \examples{
+
 data(road_P)
 
-out1 <- node.creation(land_polyg = road_P, value_col = "forest_sum", 
-scale_nodes = 10, col_nodes = "pink", cex_labels = 1)
+out1 <- node.creation(land_polyg = road_P, 
+                      value_col = "frst_sm",
+                      scale_nodes = 10, 
+                      cex_labels = 1, 
+                      shape = TRUE,
+                      shape_name_nodes = "shape_nodes_file", 
+                      overwrite = TRUE)
 
 }

@@ -1,10 +1,14 @@
 prioritize <-
-function(nodes, edges, method, shape=FALSE, shape_name_out = "priorities_shape"){#FUNCTION 3
+function(nodes, edges, method, shape=FALSE, shape_name_out = "priorities_shape", overwrite){#FUNCTION 3
 
   #Arguments:
-  #node_T - Nodes data frame;  # NOW nodes = out1
-  #edge_T - Edges data frame;  # NOW edges = out2
+  #node 
+  #edges
   #method - prioritization method:
+  #shape - write shapefile?
+  #shape_name_out = "priorities_shape" 
+  # overwrite.shape = FALSE
+  
   #1. value - connect acording to the atribute of the nodes (priority to higher values);
   #2. traffic - connect habitats separated by roads with the least traffic;
   #3. IIC - increase connectivity (with IICnum);
@@ -137,7 +141,7 @@ function(nodes, edges, method, shape=FALSE, shape_name_out = "priorities_shape")
   values(edges)$priorization <- result$priorization
 
   if (shape == TRUE){  
-  terra::writeVector(edges, paste0(shape_name_out, ".shp"))
+  terra::writeVector(edges, paste0(shape_name_out, ".shp"), overwrite = overwrite)
   message("Shapefiles created! Check the working directory, please.")
 
  }
