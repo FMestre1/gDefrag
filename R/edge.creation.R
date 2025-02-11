@@ -29,14 +29,13 @@ edge.creation <-
     #Add info on length
     road_L$length <- perim(road_L)
     
-    
     message("Creating edges...")
     
     #Get table of nodes
     node_T <- as.data.frame(nodes)  # new 02-02-2025
     
     #Which nodes are adjacent?
-    adj <- adjacent(land_polyg, pairs = FALSE)
+    adj <- terra::adjacent(land_polyg, pairs = FALSE)
     rownames(adj) <- colnames(adj) <- as.character(1:length(land_polyg))  # transferred from function 1
     adj <- upper.tri(adj, diag = FALSE) * adj
     adj_names <- rownames(adj)
