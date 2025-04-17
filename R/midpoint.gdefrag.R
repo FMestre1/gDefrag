@@ -23,10 +23,3 @@ midpoint.gdefrag <- function(line) {
   pt <- terra::vect(t(as.matrix(mid_coords)), type = "points", crs = terra::crs(line))
   return(pt)
 }
-
-
-table(df_from_list$column1 %in% edge_T$node_A)
-
-which(!df_from_list$column2 %in% edge_T$node_B)
-
-df_from_list$column2[64]
