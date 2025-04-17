@@ -31,25 +31,31 @@ edge.creation <-
     
     message("Creating edges...")
     
+    ## -------------------------------------------------------------------------
+    
     #Get table of nodes
     node_T <- as.data.frame(nodes)  # new 02-02-2025
     
     #Which nodes are adjacent?
-    adj <- terra::adjacent(land_polyg, pairs = FALSE)
-    rownames(adj) <- colnames(adj) <- as.character(1:length(land_polyg))  # transferred from function 1
-    adj <- upper.tri(adj, diag = FALSE) * adj
-    adj_names <- rownames(adj)
-    adj <- array(as.logical(adj), dim(adj))
-    rownames(adj)<- adj_names
-    colnames(adj) <- adj_names
-    ID1 <- which(adj,TRUE)
-    ID1[,1] <- as.numeric(rownames(adj)[ID1[,1]])
-    ID1[,2] <- as.numeric(colnames(adj)[ID1[,2]])
+    #adj <- terra::adjacent(land_polyg, pairs = FALSE)
+    #rownames(adj) <- colnames(adj) <- as.character(1:length(land_polyg))  # transferred from function 1
+    #rownames(adj) <- colnames(adj) <- as.character(land_polyg$Id)  # transferred from function 1
+    
+    #adj <- upper.tri(adj, diag = FALSE) * adj
+    #adj_names <- rownames(adj)
+    #adj <- array(as.logical(adj), dim(adj))
+    #rownames(adj)<- adj_names
+    #colnames(adj) <- adj_names
+    #ID1 <- which(adj,TRUE)
+    #ID1[,1] <- as.numeric(rownames(adj)[ID1[,1]])
+    #ID1[,2] <- as.numeric(colnames(adj)[ID1[,2]])
+    
+    ID1 <- as.data.frame(road_L)[,1:2]
     
     dist1 <- terra::distance(nodes)
     dist1 <- data.frame(as.matrix(dist1))
-    rownames(dist1) <- adj_names
-    colnames(dist1) <- adj_names
+    rownames(dist1) <- nodes$node_ID
+    colnames(dist1) <- nodes$node_ID
     d2 <- rep(NA,nrow(ID1))
     
     for(i in 1:nrow(ID1)){
@@ -112,7 +118,12 @@ edge.creation <-
     rownames(edge_T) <- 1:nrow(edge_T)
     edge_T <- as.data.frame(edge_T)
     
-    colnames(edge_T) <- c("node_A", "node_B", "distance", "x_node_A", "y_node_A", "x_node_B", "y_node_B", "value_A", "value_B")
+    edge_T <- data.frame(edge_T, 1:nrow(edge_T))
+    
+    colnames(edge_T) <- c("node_A", "node_B", "distance", "x_node_A", "y_node_A", "x_node_B", "y_node_B", "value_A", "value_B", "road_ID")
+    
+    #as.data.frame(road_L[,1:2])
+    #edge_T[,1:2]
     
     #Edges as spatial lines (transferred from Function 6 'create.shapes'):
     out_lines <- vector("list", nrow(edge_T))
@@ -134,56 +145,62 @@ edge.creation <-
     edge_L <- terra::vect(edge_l)
     terra::crs(edge_L) <- terra::crs(land_polyg)
     values(edge_L) <- edge_T
+
+    #plot(edge_L, col = "blue", add = TRUE)
+    ##-------------------------------------------------------------------------------------------------------------------------------
     
     #Get to the edge the value from the underlaying road
-    line_dists <- matrix(data = NA, nrow = length(road_L), ncol = length(land_polyg))
+    #line_dists <- matrix(data = NA, nrow = length(road_L), ncol = length(land_polyg))
     
-    for (l in 1:length(road_L)) {  # double loop
-      road <- road_L[l,]
-      l_centr <- terra::centroids(road)
+    #for (l in 1:length(road_L)) {  # double loop
+    #  road <- road_L[l,]
+    #  #l_centr <- terra::centroids(road)
+    #  l_centr <- midpoint.gdefrag(road)
       
-      for (p in 1:length(land_polyg)) {
-        line_dists[l, p] <- terra::distance(land_polyg[p,], l_centr)
-      }  # end for p
-    }  # end for l
+    #  for (p in 1:length(land_polyg)) {
+    #    line_dists[l, p] <- terra::distance(land_polyg[p,], l_centr)
+    #  }  # end for p
+    #}  # end for l
+
+    ##-------------------------------------------------------------------------------------------------------------------------------
     
     # Indentify adjacent polygons to each road
-    line_neighbours <- vector("list", length(road_L))
+    #line_neighbours <- vector("list", length(road_L))
     
-    for (d in 1:nrow(line_dists)) {
-      line_neighbours[[d]] <- c(which(line_dists[d, ] %in% sort(line_dists[d, ])[1:2]))  # get the two closest ones (there could be more than 2 very close to 0 distance)
-    }  # end for d
-    
-    names(line_neighbours) <- as.character(1:length(line_neighbours))
+    #for (d in 1:nrow(line_dists)) {
+    #  line_neighbours[[d]] <- c(which(line_dists[d, ] %in% sort(line_dists[d, ])[1:2]))
+    #  }
+
+    ##-------------------------------------------------------------------------------------------------------------------------------
+
+    #names(line_neighbours) <- as.character(1:length(line_neighbours))
     
     # Create a data frame
-    df_from_list <- data.frame(
-      names(line_neighbours),
-      column1 = sapply(line_neighbours, function(x) x[1]), 
-      column2 = sapply(line_neighbours, function(x) x[2])
-    )
-    
-    
-    for (i in 1:nrow(edge_T)) {
-      
-      # Define the specific numbers to find
-      number1 <- edge_T[i, "node_A"]
-      number2 <- edge_T[i, "node_B"]
+    #df_from_list <- data.frame(
+    #  names(line_neighbours),
+    #  column1 = sapply(line_neighbours, function(x) x[1]), 
+    #  column2 = sapply(line_neighbours, function(x) x[2])
+    #)
+## ----------------------------------------------------------------    
+#    for (i in 1:nrow(edge_T)) {
+#      
+#      # Define the specific numbers to find
+#      number1 <- edge_T[i, "node_A"]
+#      number2 <- edge_T[i, "node_B"]
       
       # Find the row where both numbers appear
-      road_index <- which((df_from_list$column1 == number1 & df_from_list$column2 == number2) | 
-                            (df_from_list$column1 == number2 & df_from_list$column2 == number1))
+#      road_index <- which((df_from_list$column1 == number1 & df_from_list$column2 == number2) | (df_from_list$column1 == number2 & df_from_list$column2 == number1))
       
-      edge_T$road_ID[i] <- as.integer(names(line_neighbours)[road_index])
-    }  # end for i
-    
+#      edge_T$road_ID[i] <- as.integer(names(line_neighbours)[road_index])
+#    }  # end for i
+## ----------------------------------------------------------------    
     
     #Add road length to the data frame
     values(edge_L) <- data.frame(values(edge_L),perim(edge_L))
     names(values(edge_L))[10] <- "road_length"
     
-    # Remove edges of roads under a given distance:
-    edge_L <- edge_L[values(edge_L)$road_length >= 0,]
+    # Remove edges of roads under a given length:
+    edge_L <- edge_L[values(edge_L)$road_length >= min_length,]
     
     # Eliminate edges from nodes under a given area:
     big_pol_IDs <- node_T[node_T$pol_area >= min_pol_area, ]$node_ID
@@ -207,5 +224,6 @@ edge.creation <-
     }
     
     message("Done!")
+    
     return(edge_L)
   }
