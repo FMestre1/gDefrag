@@ -27,7 +27,7 @@ edge.creation <-
     
     road_L <- terra::sharedPaths(land_polyg)
     #Add info on length
-    road_L$length <- perim(road_L)
+    road_L$length <- terra::perim(road_L)
     
     message("Creating edges...")
     
@@ -196,7 +196,7 @@ edge.creation <-
 ## ----------------------------------------------------------------    
     
     #Add road length to the data frame
-    values(edge_L) <- data.frame(values(edge_L),perim(edge_L))
+    values(edge_L) <- data.frame(values(edge_L),terra::perim(edge_L))
     names(values(edge_L))[10] <- "road_length"
     
     # Remove edges of roads under a given length:
