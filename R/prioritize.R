@@ -1,11 +1,11 @@
 prioritize <-
-function(nodes, edges, method, normalize = TRUE, shape=FALSE, shape_name_out = "priorities_shape", overwrite){#FUNCTION 3
+function(nodes, edges, method, re_scale = TRUE, shape=FALSE, shape_name_out = "priorities_shape", overwrite){#FUNCTION 3
 
   #Arguments:
   #node 
   #edges
   #method - prioritization method.
-  #normalize - normalize the values between 0 and 100?
+  #re_scale - re_scale the values between 0 and 100?
   #shape - write shapefile?
   #shape_name_out = "priorities_shape" 
   # overwrite.shape = FALSE
@@ -80,7 +80,7 @@ function(nodes, edges, method, normalize = TRUE, shape=FALSE, shape_name_out = "
     #colnames(result) <- c("edge_ID", "Prior_order")
     t2 <- t2[ order(t2[,1]), ][,2]
     
-    if(normalize == TRUE) t2 <- (t2-min(t2))/(max(t2)-min(t2))*100
+    if(re_scale == TRUE) t2 <- (t2-min(t2))/(max(t2)-min(t2))*100
     
     result <- cbind(edge_T, t2)
     #colnames(result)[10] <- "priorization"
@@ -92,7 +92,7 @@ function(nodes, edges, method, normalize = TRUE, shape=FALSE, shape_name_out = "
     mygraph <- igraph::graph_from_data_frame(edge_T[,1:2], directed = FALSE, vertices = nd)
     out_C <- igraph::edge_betweenness(mygraph, e = igraph::E(mygraph), directed = FALSE)
     
-    if(normalize == TRUE) out_C <- (out_C-min(out_C))/(max(out_C)-min(out_C))*100
+    if(re_scale == TRUE) out_C <- (out_C-min(out_C))/(max(out_C)-min(out_C))*100
     
     result <- cbind(edge_T, out_C)
     result <- as.data.frame(result)
@@ -117,7 +117,7 @@ function(nodes, edges, method, normalize = TRUE, shape=FALSE, shape_name_out = "
       dI[i] <- val1
     }
 
-    if(normalize == TRUE) dI <- (dI-min(dI))/(max(dI)-min(dI))*100
+    if(re_scale == TRUE) dI <- (dI-min(dI))/(max(dI)-min(dI))*100
 
     result <- cbind(edge_T, dI)
     result <- as.data.frame(result)
@@ -138,7 +138,7 @@ function(nodes, edges, method, normalize = TRUE, shape=FALSE, shape_name_out = "
   #names(table1) <- c("node_A", "Ah", "At", "node_B", "Bh", "Bt")
   metric <- (table1[,2]*table1[,6])+(table1[,5]*table1[,3])
   
-  if(normalize == TRUE) metric <- (metric-min(metric))/(max(metric)-min(metric))*100
+  if(re_scale == TRUE) metric <- (metric-min(metric))/(max(metric)-min(metric))*100
   
   result <- cbind(edge_T, metric)
   result <- as.data.frame(result)
