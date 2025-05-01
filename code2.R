@@ -9,6 +9,8 @@
 # Install the package from GitHub
 #devtools::install_github("FMestre1/gDefrag") 
 
+rm(list=(ls()))
+
 library(gDefrag)
 library(terra)
 
@@ -42,9 +44,20 @@ out2 <- edge.creation(nodes = out1,
                       overwrite = TRUE)
 
 #Prioritize
+out3_not_normalized <- prioritize(
+                      nodes = out1, 
+                      edges = out2, 
+                      method = "value",
+                      normalize = FALSE,  # Now works!
+                      shape = TRUE, 
+                      shape_name_out = "priorities_shape1_not_normalized", 
+                      overwrite = TRUE
+                      )
+
 out3 <- prioritize(nodes = out1, 
                    edges = out2, 
                    method = "value",
+                   normalize = TRUE,
                    shape=TRUE, 
                    shape_name_out = "priorities_shape1", 
                    overwrite = TRUE)

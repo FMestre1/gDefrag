@@ -1,10 +1,11 @@
 prioritize <-
-function(nodes, edges, method, shape=FALSE, shape_name_out = "priorities_shape", overwrite){#FUNCTION 3
+function(nodes, edges, method, normalize = TRUE, shape=FALSE, shape_name_out = "priorities_shape", overwrite){#FUNCTION 3
 
   #Arguments:
   #node 
   #edges
-  #method - prioritization method:
+  #method - prioritization method.
+  #normalize - normalize the values between 0 and 100?
   #shape - write shapefile?
   #shape_name_out = "priorities_shape" 
   # overwrite.shape = FALSE
@@ -78,7 +79,9 @@ function(nodes, edges, method, shape=FALSE, shape_name_out = "priorities_shape",
     t2 <- cbind(tab1[,1],1:nrow(tab1))
     #colnames(result) <- c("edge_ID", "Prior_order")
     t2 <- t2[ order(t2[,1]), ][,2]
-    t2 <- (t2-min(t2))/(max(t2)-min(t2))*100
+    
+    if(normalize == TRUE) t2 <- (t2-min(t2))/(max(t2)-min(t2))*100
+    
     result <- cbind(edge_T, t2)
     #colnames(result)[10] <- "priorization"
     result <- as.data.frame(result)
@@ -88,7 +91,9 @@ function(nodes, edges, method, shape=FALSE, shape_name_out = "priorities_shape",
     nd <- node_T  # changed from node_T$nodes
     mygraph <- igraph::graph_from_data_frame(edge_T[,1:2], directed = FALSE, vertices = nd)
     out_C <- igraph::edge_betweenness(mygraph, e = igraph::E(mygraph), directed = FALSE)
-    out_C <- (out_C-min(out_C))/(max(out_C)-min(out_C))*100
+    
+    if(normalize == TRUE) out_C <- (out_C-min(out_C))/(max(out_C)-min(out_C))*100
+    
     result <- cbind(edge_T, out_C)
     result <- as.data.frame(result)
   }
@@ -112,7 +117,7 @@ function(nodes, edges, method, shape=FALSE, shape_name_out = "priorities_shape",
       dI[i] <- val1
     }
 
-    dI <- (dI-min(dI))/(max(dI)-min(dI))*100
+    if(normalize == TRUE) dI <- (dI-min(dI))/(max(dI)-min(dI))*100
 
     result <- cbind(edge_T, dI)
     result <- as.data.frame(result)
@@ -120,6 +125,7 @@ function(nodes, edges, method, shape=FALSE, shape_name_out = "priorities_shape",
   }
 
   if (method == "AWM"){
+    
   nodes_areas <- node_T[,c(1,3)]
   #nodes_areas <- node_T$pol_area
   nodes_A_prop <- edge_T[,c(1,8)]
@@ -131,9 +137,12 @@ function(nodes, edges, method, shape=FALSE, shape_name_out = "priorities_shape",
   table1 <- cbind(ndA,ndB)
   #names(table1) <- c("node_A", "Ah", "At", "node_B", "Bh", "Bt")
   metric <- (table1[,2]*table1[,6])+(table1[,5]*table1[,3])
-  hab_prop <- (metric-min(metric))/(max(metric)-min(metric))*100
-  result <- cbind(edge_T, hab_prop)
+  
+  if(normalize == TRUE) metric <- (metric-min(metric))/(max(metric)-min(metric))*100
+  
+  result <- cbind(edge_T, metric)
   result <- as.data.frame(result)
+  
   }
 
   colnames(result)[ncol(result)] <- "priorization"
