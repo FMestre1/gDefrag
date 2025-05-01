@@ -16,6 +16,8 @@ library(terra)
 
 road_P <- terra::vect("data/road_P.shp")
 
+road_P <- road_P[-2,]
+
 #Obtaining nodes
 out1 <- node.creation(land_polyg = road_P, 
                       value_col = "frst_sm",
@@ -44,16 +46,6 @@ out2 <- edge.creation(nodes = out1,
                       overwrite = TRUE)
 
 #Prioritize
-out3_not_normalized <- prioritize(
-                      nodes = out1, 
-                      edges = out2, 
-                      method = "value",
-                      normalize = FALSE,
-                      shape = TRUE, 
-                      shape_name_out = "priorities_shape1_not_normalized", 
-                      overwrite = TRUE
-                      )
-
 out3 <- prioritize(nodes = out1, 
                    edges = out2, 
                    method = "value",
@@ -69,6 +61,14 @@ out4 <- prioritize(nodes = out1,
                    shape_name_out = "priorities_shape2", 
                    overwrite = TRUE)
 
+out4_n <- prioritize(nodes = out1, 
+                   edges = out2, 
+                   method = "IIC",
+                   shape=TRUE,
+                   normalize = FALSE,
+                   shape_name_out = "priorities_shape2_n", 
+                   overwrite = TRUE)
+
 out5 <- prioritize(nodes = out1, 
                    edges = out2, 
                    method = "between",
@@ -81,6 +81,14 @@ out6 <- prioritize(nodes = out1_2,
                    method = "AWM",
                    shape=TRUE, 
                    shape_name_out = "priorities_shape4", 
+                   overwrite = TRUE)
+
+out6_n <- prioritize(nodes = out1_2, 
+                   edges = out2, 
+                   method = "AWM",
+                   shape=TRUE, 
+                   normalize = FALSE,
+                   shape_name_out = "priorities_shape4_n", 
                    overwrite = TRUE)
 
 #Plotting results
