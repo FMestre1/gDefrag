@@ -47,7 +47,6 @@ out2 <- edge.creation(nodes = out1,
 out3 <- prioritize(nodes = out1, 
                    edges = out2, 
                    method = "value",
-                   normalize = TRUE,
                    shape=TRUE, 
                    shape_name_out = "priorities_shape1", 
                    overwrite = TRUE)
@@ -63,7 +62,7 @@ out4_n <- prioritize(nodes = out1,
                    edges = out2, 
                    method = "IIC",
                    shape=TRUE,
-                   normalize = FALSE,
+                   re_scale = FALSE,
                    shape_name_out = "priorities_shape2_n", 
                    overwrite = TRUE)
 
@@ -85,7 +84,7 @@ out6_n <- prioritize(nodes = out1_2,
                    edges = out2, 
                    method = "AWM",
                    shape=TRUE, 
-                   normalize = FALSE,
+                   re_scale = FALSE,
                    shape_name_out = "priorities_shape4_n", 
                    overwrite = TRUE)
 
