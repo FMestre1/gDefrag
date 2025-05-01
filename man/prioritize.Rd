@@ -20,6 +20,9 @@ Output of \code{\link{edge.creation}}.
   \item{method}{
 Method to be used in the prioritization of the connectivity corridors. Detailed description in the 'details' section. 
 }
+  \item{normalize}{
+TRUE/FALSE. Should the output be normalized? 
+}
   \item{shape}{
 Create a shapefiles? (TRUE/FALSE).
 }
