@@ -48,7 +48,7 @@ out3_not_normalized <- prioritize(
                       nodes = out1, 
                       edges = out2, 
                       method = "value",
-                      normalize = FALSE,  # Now works!
+                      normalize = FALSE,
                       shape = TRUE, 
                       shape_name_out = "priorities_shape1_not_normalized", 
                       overwrite = TRUE
