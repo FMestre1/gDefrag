@@ -7,5 +7,6 @@ Depends: sp, R (>= 3.0)
 Imports: igraph, methods, terra 
 Author: Frederico Mestre, Fernando Ascensao, A. Marcia Barbosa
 Maintainer: Frederico Mestre <mestre.frederico@gmail.com>
-Description:  Provides a set of tools to help the de-fragmentation process. It works by prioritizing the different sections of linear infrastructures (e.g. roads, power-lines) to increase the available amount of a given resource.   
+Description: Provides a set of tools to help the de-fragmentation process. It works by prioritizing the different sections of linear infrastructures (e.g. roads, power-lines) to increase the available amount of a given resource.   
 License: GPL (>= 2)
+RoxygenNote: 7.3.2
