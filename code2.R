@@ -94,7 +94,6 @@ plotgraph(nodes = out1, edges = out4, land_polyg = road_P, main = "IIC")
 plotgraph(nodes = out1, edges = out5, land_polyg = road_P, main = "Edge betweenness")
 plotgraph(nodes = out1_2, edges = out6, land_polyg = road_P, main = "AWC")
 
-
 #################################################################################
 
 # Wraper function to run the whole analysis
