@@ -15,9 +15,7 @@ library(gDefrag)
 library(terra)
 
 road_P <- terra::vect("data/road_P.shp")
-
-road_P <- road_P[-2,]
-
+  
 #Obtaining nodes
 out1 <- node.creation(land_polyg = road_P, 
                       value_col = "frst_sm",
