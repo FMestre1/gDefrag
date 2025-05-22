@@ -1,8 +1,8 @@
 Package: gDefrag
 Type: Package
 Title: Graph-Based Landscape De-Fragmentation
-Version: 1.3
-Date: 2025-05-01
+Version: 1.4
+Date: 2025-05-23
 Depends: sp, R (>= 3.0)
 Imports: igraph, methods, terra 
 Author: Frederico Mestre, Fernando Ascensao, A. Marcia Barbosa

@@ -16,83 +16,72 @@ library(terra)
 
 road_P <- terra::vect("data/road_P.shp")
   
-#Obtaining nodes
+#Obtaining nodes ---------------------------------------------------------------
 out1 <- node.creation(land_polyg = road_P, 
                       value_col = "frst_sm",
                       scale_nodes = 10, 
                       cex_labels = 1, 
-                      shape = TRUE,
+                      shape = FALSE,
                       shape_name_nodes = "shape_nodes_file", 
-                      overwrite = TRUE)
+                      overwrite = FALSE)
 
-#Obtaining nodes
 out1_2 <- node.creation(land_polyg = road_P, 
                       value_col = "proprtn",
-                      scale_nodes = 10, 
+                      scale_nodes = 100, 
                       cex_labels = 1, 
-                      shape = TRUE,
+                      shape = FALSE,
                       shape_name_nodes = "shape_nodes_file", 
-                      overwrite = TRUE)
+                      overwrite = FALSE)
 
-#Obtaining edges
+#Obtaining edges ---------------------------------------------------------------
 out2 <- edge.creation(nodes = out1, 
                       land_polyg = road_P,
                       min_length = 0, 
                       min_pol_area = 0, 
                       shape_name_edges = "shape_edges_file",
-                      shape = TRUE,
-                      overwrite = TRUE)
+                      shape = FALSE,
+                      overwrite = FALSE)
 
-#Prioritize
+#Prioritize --------------------------------------------------------------------
 out3 <- prioritize(nodes = out1, 
                    edges = out2, 
                    method = "value",
-                   shape=TRUE, 
+                   shape=FALSE, 
                    shape_name_out = "priorities_shape1", 
-                   overwrite = TRUE)
+                   overwrite = FALSE)
 
 out4 <- prioritize(nodes = out1, 
                    edges = out2, 
                    method = "IIC",
-                   shape=TRUE, 
+                   shape=FALSE, 
                    shape_name_out = "priorities_shape2", 
-                   overwrite = TRUE)
-
-out4_n <- prioritize(nodes = out1, 
-                   edges = out2, 
-                   method = "IIC",
-                   shape=TRUE,
-                   re_scale = FALSE,
-                   shape_name_out = "priorities_shape2_n", 
-                   overwrite = TRUE)
+                   overwrite = FALSE)
 
 out5 <- prioritize(nodes = out1, 
                    edges = out2, 
                    method = "between",
-                   shape=TRUE, 
+                   shape=FALSE, 
                    shape_name_out = "priorities_shape3", 
-                   overwrite = TRUE)
+                   overwrite = FALSE)
 
 out6 <- prioritize(nodes = out1_2, 
                    edges = out2, 
                    method = "AWM",
-                   shape=TRUE, 
+                   shape=FALSE, 
                    shape_name_out = "priorities_shape4", 
-                   overwrite = TRUE)
+                   overwrite = FALSE)
 
-out6_n <- prioritize(nodes = out1_2, 
-                   edges = out2, 
-                   method = "AWM",
-                   shape=TRUE, 
-                   re_scale = FALSE,
-                   shape_name_out = "priorities_shape4_n", 
-                   overwrite = TRUE)
-
-#Plotting results
+#Plotting results --------------------------------------------------------------
+par(mfrow = c(2, 2))
 plotgraph(nodes = out1, edges = out3, land_polyg = road_P, main = "Habitat value")
-plotgraph(nodes = out1, edges = out4, land_polyg = road_P, main = "IIC")
 plotgraph(nodes = out1, edges = out5, land_polyg = road_P, main = "Edge betweenness")
-plotgraph(nodes = out1_2, edges = out6, land_polyg = road_P, main = "AWC")
+plotgraph(nodes = out1, edges = out6, land_polyg = road_P, main = "AWC")
+plotgraph(nodes = out1, edges = out4, land_polyg = road_P, main = "IIC")
+
+dev.off()
+
+out4$priorization
+out6$priorization
 
 #################################################################################
 
@@ -103,5 +92,5 @@ out1 <- gDefrag.full(land_polyg = road_P, method = "value",
                      shape_name_nodes = "fullrun_shape_all_nodes0", 
                      shape_name_edges = "fullrun_shape_edges0", 
                      shape_name_out = "fullrun_priorities_shape0",
-                     shape = TRUE,
-                     overwrite = TRUE)
+                     shape = FALSE,
+                     overwrite = FALSE)
