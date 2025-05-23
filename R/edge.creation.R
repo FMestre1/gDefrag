@@ -1,5 +1,5 @@
 edge.creation <-
-  function(nodes, land_polyg, min_length = 0, min_pol_area = 0, plot = TRUE, shape = FALSE, shape_name_edges = "shape_edges", overwrite){#FUNCTION 2
+  function(nodes, land_polyg, min_length = 0, min_pol_area = 0, plot = TRUE, shape = FALSE, shape_name_edges = "shape_edges", overwrite = FALSE){#FUNCTION 2
     
     #Create empty objects
     autoID <- NULL

@@ -21,7 +21,7 @@ The package is based on the work presented in:
     -   **Area-Weighted Metric (AWM)**: Considers both habitat quality and size.
 -   **Shapefile Integration**: Supports input and output of spatial data in shapefile format.
 
-Thanks to Thais Ranzi (UFRGS, Brazil) pinpointing a few bugs in the package.
+Thanks to Thais Ranzi (UFRGS, Brazil) for spotting a few bugs in the code.
 
 
 ## Installation
@@ -35,3 +35,40 @@ install.packages("devtools")
 # Install gDefrag from GitHub
 devtools::install_github("FMestre1/gDefrag")
 ```
+
+## Example 
+  
+```R
+
+#Load gDefrag
+library(gDefrag)
+
+# Create nodes
+out1 <- node.creation(land_polyg = road_P, 
+                      value_col = "frst_sm",
+                      scale_nodes = 10, 
+                      cex_labels = 1 
+                      )
+                      
+# Create edges
+out2 <- edge.creation(nodes = out1, 
+                      land_polyg = road_P,
+                      min_length = 0, 
+                      min_pol_area = 0
+                      )
+                      
+# Prioritize using "value"                      
+out3 <- prioritize(nodes = out1, 
+                   edges = out2, 
+                   method = "value"
+                   )
+
+# Prioritize using "IIC"                      
+ out4 <- prioritize(nodes = out1, 
+                   edges = out2, 
+                   method = "IIC"
+                   )
+
+
+```
+

@@ -1,5 +1,5 @@
 prioritize <-
-  function(nodes, edges, method, re_scale = TRUE, shape=TRUE, shape_name_out = "priorities_shape", overwrite=TRUE){#FUNCTION 3
+  function(nodes, edges, method, re_scale = TRUE, shape = FALSE, shape_name_out = "priorities_shape", overwrite = FALSE){#FUNCTION 3
     
     
     #Required functions

@@ -20,42 +20,47 @@ road_P <- terra::vect("data/road_P.shp")
 out1 <- node.creation(land_polyg = road_P, 
                       value_col = "frst_sm",
                       scale_nodes = 10, 
-                      cex_labels = 1, 
-                      shape = FALSE,
-                      shape_name_nodes = "shape_nodes_file", 
-                      overwrite = FALSE)
+                      cex_labels = 1#, 
+                      #shape = FALSE,
+                      #shape_name_nodes = "shape_nodes_file", 
+                      #overwrite = FALSE
+                      )
 
 out1_2 <- node.creation(land_polyg = road_P, 
                       value_col = "proprtn",
                       scale_nodes = 100, 
-                      cex_labels = 1, 
-                      shape = FALSE,
-                      shape_name_nodes = "shape_nodes_file", 
-                      overwrite = FALSE)
+                      cex_labels = 1#, 
+                      #shape = FALSE,
+                      #shape_name_nodes = "shape_nodes_file", 
+                      #overwrite = FALSE
+                      )
 
 #Obtaining edges ---------------------------------------------------------------
 out2 <- edge.creation(nodes = out1, 
                       land_polyg = road_P,
                       min_length = 0, 
-                      min_pol_area = 0, 
-                      shape_name_edges = "shape_edges_file",
-                      shape = FALSE,
-                      overwrite = FALSE)
+                      min_pol_area = 0#, 
+                      #shape_name_edges = "shape_edges_file",
+                      #shape = FALSE,
+                      #overwrite = FALSE
+                      )
 
 #Prioritize --------------------------------------------------------------------
 out3 <- prioritize(nodes = out1, 
                    edges = out2, 
-                   method = "value",
-                   shape=FALSE, 
-                   shape_name_out = "priorities_shape1", 
-                   overwrite = FALSE)
+                   method = "value"#,
+                   #shape=FALSE, 
+                   #shape_name_out = "priorities_shape1", 
+                   #overwrite = FALSE
+                   )
 
 out4 <- prioritize(nodes = out1, 
                    edges = out2, 
-                   method = "IIC",
-                   shape=FALSE, 
-                   shape_name_out = "priorities_shape2", 
-                   overwrite = FALSE)
+                   method = "IIC"#,
+                   #shape=FALSE, 
+                   #shape_name_out = "priorities_shape2", 
+                   #overwrite = FALSE
+                   )
 
 out5 <- prioritize(nodes = out1, 
                    edges = out2, 

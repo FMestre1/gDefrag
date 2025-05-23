@@ -1,5 +1,5 @@
 gDefrag.full <-
-function(land_polyg, method, value_col = NULL, min_length = 0, min_pol_area = 0, shape = FALSE, shape_name_nodes = "shape_all_nodes", shape_name_edges = "shape_edges", shape_name_out = "priorities_shape", scale_nodes = 10, col_nodes = "deepskyblue4", col_labels = "white", cex_labels = 1, main = "Graph", overwrite) {
+function(land_polyg, method, value_col = NULL, min_length = 0, min_pol_area = 0, shape = FALSE, shape_name_nodes = "shape_all_nodes", shape_name_edges = "shape_edges", shape_name_out = "priorities_shape", scale_nodes = 10, col_nodes = "deepskyblue4", col_labels = "white", cex_labels = 1, main = "Graph", overwrite = FALSE) {
 
 road_P <- NULL
 

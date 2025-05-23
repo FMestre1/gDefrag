@@ -1,5 +1,5 @@
 node.creation <-
-function(land_polyg, value_col, plot = TRUE, scale_nodes = 1, col_nodes = "red", cex_labels = 1, shape = FALSE, shape_name_nodes = "shape_nodes", overwrite){#FUNCTION 1
+function(land_polyg, value_col, plot = TRUE, scale_nodes = 1, col_nodes = "red", cex_labels = 1, shape = FALSE, shape_name_nodes = "shape_nodes", overwrite = FALSE){#FUNCTION 1
   
 
   if (terra::is.lonlat(land_polyg))  stop ("'land_polyg' must be in a projected coordinate system.")
