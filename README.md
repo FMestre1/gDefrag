@@ -21,6 +21,9 @@ The package is based on the work presented in:
     -   **Area-Weighted Metric (AWM)**: Considers both habitat quality and size.
 -   **Shapefile Integration**: Supports input and output of spatial data in shapefile format.
 
+Thanks to Thais Ranzi (UFRGS, Brazil) pinpointing a few bugs in the package.
+
+
 ## Installation
 
 To install the latest version from GitHub:
